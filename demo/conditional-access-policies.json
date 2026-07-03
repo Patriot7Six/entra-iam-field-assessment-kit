@@ -1,0 +1,33 @@
+[
+  {
+    "displayName": "Require MFA for admins",
+    "state": "enabled",
+    "targets": [
+      "DirectoryRoles"
+    ],
+    "controls": [
+      "mfa"
+    ]
+  },
+  {
+    "displayName": "Block legacy authentication",
+    "state": "enabledForReportingButNotEnforced",
+    "targets": [
+      "AllUsers"
+    ],
+    "controls": [
+      "block"
+    ]
+  },
+  {
+    "displayName": "Require compliant device for finance",
+    "state": "enabled",
+    "targets": [
+      "Finance"
+    ],
+    "controls": [
+      "compliantDevice",
+      "mfa"
+    ]
+  }
+]

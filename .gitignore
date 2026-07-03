@@ -1,0 +1,11 @@
+/reports/generated/
+/reports/tenant-*/
+/exports/
+.env
+*.secret.json
+graph-context.json
+*.token
+*.pfx
+*.pem
+*.key
+.DS_Store

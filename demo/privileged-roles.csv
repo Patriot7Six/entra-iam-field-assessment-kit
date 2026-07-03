@@ -1,0 +1,4 @@
+id,principal,role,assignmentType,eligible,lastReviewed,justification
+pa001,wile@acme-coyote.example,Global Administrator,Permanent,false,2025-01-01,Legacy assignment
+pa002,avery@acme-coyote.example,Application Administrator,Eligible,true,2026-06-01,App support
+pa003,svc-legacy-report,Privileged Role Administrator,Permanent,false,2024-01-01,Unknown

@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Quarterly Finance ERP Access Review",
+    "resource": "Finance ERP",
+    "reviewer": "Finance Owner",
+    "frequency": "Quarterly",
+    "lastCompleted": "2026-03-31",
+    "status": "Overdue"
+  },
+  {
+    "name": "Engineering Git Access Review",
+    "resource": "Engineering Git",
+    "reviewer": "Engineering Lead",
+    "frequency": "Monthly",
+    "lastCompleted": "2026-06-30",
+    "status": "Current"
+  }
+]

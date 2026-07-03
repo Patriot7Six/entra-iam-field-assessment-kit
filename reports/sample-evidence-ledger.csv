@@ -1,0 +1,21 @@
+Timestamp,Area,Object,Result,Notes
+2026-07-03T18:11:26Z,Authentication,Marvin Martian,Finding,MFA-ready field was false while account was enabled.
+2026-07-03T18:11:26Z,Authentication,Legacy Contractor,Finding,MFA-ready field was false while account was enabled.
+2026-07-03T18:11:26Z,Lifecycle,Legacy Contractor,Finding,Termination date present while account enabled.
+2026-07-03T18:11:26Z,Application Review,Finance ERP,Reviewed,Criticality=Critical; SSO=true; MFA=true; MTTEHours=16
+2026-07-03T18:11:26Z,Application Review,Engineering Git,Reviewed,Criticality=Critical; SSO=true; MFA=true; MTTEHours=4
+2026-07-03T18:11:26Z,Application Review,Legacy Timekeeping,Reviewed,Criticality=High; SSO=false; MFA=false; MTTEHours=48
+2026-07-03T18:11:26Z,Application Review,Vendor Portal,Reviewed,Criticality=Moderate; SSO=true; MFA=false; MTTEHours=24
+2026-07-03T18:11:26Z,Application Review,Ticketing System,Reviewed,Criticality=Critical; SSO=true; MFA=true; MTTEHours=0.083
+2026-07-03T18:11:26Z,Application Review,Deployment Pipeline,Reviewed,Criticality=Critical; SSO=true; MFA=true; MTTEHours=0.5
+2026-07-03T18:11:26Z,Service Account Review,svc-finance-sync,Reviewed,Owner=Finance; CredentialAgeDays=410
+2026-07-03T18:11:26Z,Service Account Review,svc-legacy-report,Reviewed,Owner=Unknown; CredentialAgeDays=900
+2026-07-03T18:11:26Z,Service Account Review,svc-ticket-api,Reviewed,Owner=IT; CredentialAgeDays=45
+2026-07-03T18:11:26Z,Privileged Access,wile@acme-coyote.example,Reviewed,Role=Global Administrator; Assignment=Permanent; LastReviewed=2025-01-01
+2026-07-03T18:11:26Z,Privileged Access,avery@acme-coyote.example,Reviewed,Role=Application Administrator; Assignment=Eligible; LastReviewed=2026-06-01
+2026-07-03T18:11:26Z,Privileged Access,svc-legacy-report,Reviewed,Role=Privileged Role Administrator; Assignment=Permanent; LastReviewed=2024-01-01
+2026-07-03T18:11:26Z,Access Review,Quarterly Finance ERP Access Review,Reviewed,Resource=Finance ERP; Status=Overdue
+2026-07-03T18:11:26Z,Access Review,Engineering Git Access Review,Reviewed,Resource=Engineering Git; Status=Current
+2026-07-03T18:11:26Z,Conditional Access,Require MFA for admins,Reviewed,State=enabled
+2026-07-03T18:11:26Z,Conditional Access,Block legacy authentication,Reviewed,State=enabledForReportingButNotEnforced
+2026-07-03T18:11:26Z,Conditional Access,Require compliant device for finance,Reviewed,State=enabled

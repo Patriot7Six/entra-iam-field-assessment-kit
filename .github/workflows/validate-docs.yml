@@ -1,0 +1,30 @@
+name: validate-docs
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+jobs:
+  secret-scan-lite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fail on obvious tenant leaks
+        run: |
+          # Excludes from the GUID check:
+          #   /terraform  -- Entra ID app_role blocks require a GUID-shaped id
+          #                  by schema, so this repo's placeholder role IDs
+          #                  are intentionally GUID-shaped fakes.
+          #   /.github     -- this workflow's own comments document that
+          #                  placeholder pattern by example.
+          # Excludes from the onmicrosoft.com check:
+          #   /.github, ConvertTo-RedactedIAMData.ps1, and README.md -- all
+          #   explain the redaction pattern by naming it, not by leaking a
+          #   real domain.
+          if grep -RInE "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" . --exclude-dir=.git --exclude-dir=terraform --exclude-dir=.github ; then
+            echo "Potential tenant-specific GUID found. Review before commit."
+            exit 1
+          fi
+          if grep -RInE "onmicrosoft\.com" . --exclude-dir=.git --exclude-dir=.github --exclude=ConvertTo-RedactedIAMData.ps1 --exclude=README.md ; then
+            echo "Potential tenant domain found. Review before commit."
+            exit 1
+          fi

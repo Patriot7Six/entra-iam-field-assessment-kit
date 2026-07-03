@@ -1,0 +1,7 @@
+id,displayName,criticality,ssoEnabled,mfaRequired,owner,accessMethod,averageEnablementHours,hasAccessReview,notes
+app001,Finance ERP,Critical,true,true,Finance,GroupAssignment,16,false,Manual approval routing
+app002,Engineering Git,Critical,true,true,Engineering,GroupAssignment,4,true,Role mapped
+app003,Legacy Timekeeping,High,false,false,Operations,LocalAccounts,48,false,No SSO
+app004,Vendor Portal,Moderate,true,false,Procurement,DirectAssignment,24,false,MFA gap
+app005,Ticketing System,Critical,true,true,IT,AccessPackage,0.083,true,Meets five-minute MTTE stretch goal for critical systems
+app006,Deployment Pipeline,Critical,true,true,Engineering,AccessPackage,0.5,true,Under one hour but above the five-minute stretch goal

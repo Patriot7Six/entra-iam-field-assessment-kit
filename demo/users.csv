@@ -1,0 +1,7 @@
+id,displayName,userPrincipalName,department,jobTitle,accountEnabled,userType,createdDateTime,lastSignInDateTime,mfaCapable,role,manager,hireDate,terminationDate
+u001,Avery Roadrunner,avery@acme-coyote.example,Engineering,Platform Engineer,true,Member,2025-01-10,2026-07-01,true,Engineer,m010,2025-01-10,
+u002,Wile Coyote,wile@acme-coyote.example,Engineering,Lead Engineer,true,Member,2024-03-20,2026-06-30,true,Engineering Lead,m010,2024-03-20,
+u003,Marvin Martian,marvin@acme-coyote.example,Finance,Finance Analyst,true,Member,2023-09-11,2026-04-10,false,Finance Analyst,m020,2023-09-11,
+u004,Daffy Duck,daffy@acme-coyote.example,Operations,Operations Manager,true,Member,2022-02-01,2026-07-02,true,Operations Manager,m030,2022-02-01,
+u005,Legacy Contractor,legacy.contractor@vendor.example,Engineering,Contractor,true,Guest,2021-06-01,2025-11-17,false,Contractor,m010,2021-06-01,2025-12-31
+u006,Disabled Former User,former@acme-coyote.example,Sales,Sales Rep,false,Member,2022-05-05,2024-10-01,false,Sales,m040,2022-05-05,2025-01-01
