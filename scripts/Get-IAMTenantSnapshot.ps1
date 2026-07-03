@@ -3,8 +3,40 @@ param(
     [switch]$Redact
 )
 
+$ErrorActionPreference = 'Stop'
+
 . "$PSScriptRoot/ConvertTo-RedactedIAMData.ps1"
 New-Item -ItemType Directory -Path $OutputPath -Force | Out-Null
+
+# Fail fast on prerequisites instead of emitting empty CSVs. Each module below
+# provides cmdlets used later in this script.
+$requiredModules = @(
+    'Microsoft.Graph.Users'                # Get-MgUser
+    'Microsoft.Graph.Groups'               # Get-MgGroup
+    'Microsoft.Graph.Applications'         # Get-MgServicePrincipal, Get-MgServicePrincipalOwner
+    'Microsoft.Graph.Identity.SignIns'     # Get-MgIdentityConditionalAccessPolicy
+    'Microsoft.Graph.Identity.Governance'  # Get-MgRoleManagementDirectory* cmdlets
+)
+$missingModules = @($requiredModules | Where-Object { -not (Get-Module -ListAvailable -Name $_) })
+if ($missingModules.Count -gt 0) {
+    $installHint = "Install-Module $($missingModules -join ', ') -Scope CurrentUser"
+    throw "Missing required Microsoft Graph PowerShell modules: $($missingModules -join ', ').`nInstall them with:`n  $installHint`nor install the full SDK (slow, several hundred MB):`n  Install-Module Microsoft.Graph -Scope CurrentUser"
+}
+
+if (-not (Get-MgContext)) {
+    Write-Host 'No Microsoft Graph session found. Launching connection helper...' -ForegroundColor Yellow
+    & "$PSScriptRoot/Connect-IAMAssessmentGraph.ps1"
+    if (-not (Get-MgContext)) {
+        throw 'Microsoft Graph connection failed or was cancelled. Run ./scripts/Connect-IAMAssessmentGraph.ps1 manually, then retry.'
+    }
+}
+
+$grantedScopes = (Get-MgContext).Scopes
+$expectedScopes = @('User.Read.All','Group.Read.All','Application.Read.All','Directory.Read.All','AuditLog.Read.All','Policy.Read.All','RoleManagement.Read.Directory')
+$missingScopes = @($expectedScopes | Where-Object { $grantedScopes -notcontains $_ })
+if ($missingScopes.Count -gt 0) {
+    Write-Host "Warning: current Graph session is missing scopes: $($missingScopes -join ', '). Some collections may fail or return partial data. Reconnect with ./scripts/Connect-IAMAssessmentGraph.ps1 for the full set." -ForegroundColor Yellow
+}
 
 # NOTE: this script has not been execution-tested against a live tenant in the
 # environment that built this kit (no PowerShell / Microsoft.Graph module
@@ -20,8 +52,16 @@ New-Item -ItemType Directory -Path $OutputPath -Force | Out-Null
 # falls back to plain role assignments only.
 
 Write-Host 'Collecting users...' -ForegroundColor Cyan
-$users = Get-MgUser -All -Property Id,DisplayName,UserPrincipalName,Department,JobTitle,AccountEnabled,UserType,CreatedDateTime,SignInActivity |
-    Select-Object Id,DisplayName,UserPrincipalName,Department,JobTitle,AccountEnabled,UserType,CreatedDateTime,@{n='LastSignInDateTime';e={$_.SignInActivity.LastSignInDateTime}}
+try {
+    # SignInActivity requires Entra ID P1/P2 licensing and the AuditLog.Read.All
+    # scope; fall back to collecting without it rather than aborting the snapshot.
+    $users = Get-MgUser -All -Property Id,DisplayName,UserPrincipalName,Department,JobTitle,AccountEnabled,UserType,CreatedDateTime,SignInActivity |
+        Select-Object Id,DisplayName,UserPrincipalName,Department,JobTitle,AccountEnabled,UserType,CreatedDateTime,@{n='LastSignInDateTime';e={$_.SignInActivity.LastSignInDateTime}}
+} catch {
+    Write-Host 'Could not collect SignInActivity (requires Entra ID P1/P2 and AuditLog.Read.All). Collecting users without last sign-in data.' -ForegroundColor Yellow
+    $users = Get-MgUser -All -Property Id,DisplayName,UserPrincipalName,Department,JobTitle,AccountEnabled,UserType,CreatedDateTime |
+        Select-Object Id,DisplayName,UserPrincipalName,Department,JobTitle,AccountEnabled,UserType,CreatedDateTime,@{n='LastSignInDateTime';e={$null}}
+}
 
 Write-Host 'Collecting groups...' -ForegroundColor Cyan
 $groups = Get-MgGroup -All -Property Id,DisplayName,SecurityEnabled,MailEnabled,GroupTypes,CreatedDateTime |

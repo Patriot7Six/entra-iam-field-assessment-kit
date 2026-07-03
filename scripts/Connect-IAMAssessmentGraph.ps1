@@ -12,6 +12,10 @@ $Scopes = @(
     'RoleManagement.Read.Directory'
 )
 
+if (-not (Get-Module -ListAvailable -Name 'Microsoft.Graph.Authentication')) {
+    throw "The Microsoft Graph PowerShell SDK is not installed. Install at least the authentication module with:`n  Install-Module Microsoft.Graph.Authentication -Scope CurrentUser`nThe snapshot script will tell you which additional Microsoft.Graph.* modules it needs."
+}
+
 Write-Host 'Connecting to Microsoft Graph with read-oriented scopes...' -ForegroundColor Cyan
 Connect-MgGraph -Scopes $Scopes
 Get-MgContext | Select-Object TenantId, Account, Scopes

@@ -74,10 +74,17 @@ reports/generated/redaction-checklist.md
 Tenant mode uses Microsoft Graph PowerShell read-only scopes where possible. Run it only from a tenant you are authorized to assess.
 
 ```powershell
-Install-Module Microsoft.Graph -Scope CurrentUser
+# Install only the Graph submodules the kit uses (much faster than the full Microsoft.Graph meta-module):
+Install-Module Microsoft.Graph.Users, Microsoft.Graph.Groups, Microsoft.Graph.Applications, Microsoft.Graph.Identity.SignIns, Microsoft.Graph.Identity.Governance -Scope CurrentUser
+
 ./scripts/Connect-IAMAssessmentGraph.ps1
 ./scripts/Invoke-IAMAssessment.ps1 -Mode Tenant -OutputPath ./reports/tenant-redacted -Redact
 ```
+
+The snapshot script checks these prerequisites itself: it stops with an install
+command if any required module is missing, and launches the connection helper
+automatically if there is no active Graph session — so running the connect
+script separately is optional.
 
 The script redacts common sensitive fields before writing report outputs. You still need to review everything in `/reports/tenant-redacted` before publishing screenshots or copying content into GitHub.
 
